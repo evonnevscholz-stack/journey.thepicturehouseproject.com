@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Visual Odyssey | Journey Through Photography</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --deep-blue: #0a192f;
+            --gold-accent: #FFD700;
+            --cyber-teal: #00ffcc;
+            --dark-card: #112240;
+            --light-text: #e6f1ff;
+            --shadow-glow: 0 0 20px rgba(0, 255, 204, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--deep-blue);
+            color: var(--light-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* Parallax & 3D Layers */
+        .parallax-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            pointer-events: none;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+
+        .layer-1 { 
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            opacity: 0.03;
+            transform: translateZ(-5px) scale(1.5);
+        }
+        .layer-2 { 
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            opacity: 0.02;
+            transform: translateZ(-3px) scale(1.3);
+        }
+
+        /* Interactive Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(10, 25, 47, 0.85) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 25, 47, 0.85) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -5;
+            animation: gridMove 20s infinite linear;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Floating Navigation */
+        .floating-nav {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            backdrop-filter: blur(10px);
+            background: rgba(17, 34, 64, 0.5);
+            padding: 20px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(230, 241, 255, 0.3);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .nav-dot.active {
+            background-color: var(--cyber-teal);
+            transform: scale(1.5);
+            box-shadow: 0 0 15px var(--cyber-teal);
+        }
+
+        .nav-dot:hover:not(.active) {
+            background-color: var(--gold-accent);
+            transform: scale(1.2);
+        }
+
+        .nav-dot::after {
+            content: attr(data-title);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            background: var(--dark-card);
+            color: var(--cyber-teal);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+            visibility: visible;
+            right: 30px;
+        }
+
+        /* Hero Section - Fullscreen Journey */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(0, 255, 204, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--light-text) 30%, var(--cyber-teal) 70%, var(--gold-accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 5px 15px rgba(0, 255, 204, 0.2)); }
+            100% { filter: drop-shadow(0 5px 25px rgba(255, 215, 0, 0.3)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #8892b0;
+            margin-bottom: 50px;
+            max-width: 600px;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        .typewriter-text {
+            font-size: 1.2rem;
+            color: var(--cyber-teal);
+            border-right: 3px solid var(--cyber-teal);
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            animation: blink 0.7s infinite, typing 4s steps(40, end);
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.1), rgba(255, 215, 0, 0.1));
+            color: var(--cyber-teal);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-glow);
+            color: var(--gold-accent);
+            border-color: var(--gold-accent);
+        }
+
+        .hero-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Journey Chapters - Fullscreen Sections */
+        .journey-chapter {
+            min-height: 100vh;
+            padding: 100px 10%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .chapter-content {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            width: 100%;
+        }
+
+        .chapter-text {
+            flex: 1;
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .chapter-text.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .chapter-number {
+            font-size: 1rem;
+            color: var(--gold-accent);
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .chapter-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            color: var(--light-text);
+            line-height: 1.2;
+        }
+
+        .chapter-desc {
+            font-size: 1.2rem;
+            color: #8892b0;
+            margin-bottom: 40px;
+        }
+
+        .chapter-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--cyber-teal);
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #8892b0;
+            letter-spacing: 1px;
+        }
+
+        /* Interactive Photo Gallery */
+        .chapter-gallery {
+            flex: 1;
+            position: relative;
+            height: 600px;
+            perspective: 1000px;
+        }
+
+        .photo-stack {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .photo-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transition: transform 0.8s, opacity 0.8s, filter 0.8s;
+            cursor: pointer;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(10, 25, 47, 0.95));
+            padding: 30px;
+            transform: translateY(100%);
+            transition: transform 0.5s;
+        }
+
+        .photo-item:hover .photo-info {
+            transform: translateY(0);
+        }
+
+        /* Photography Gear Showcase */
+        .gear-section {
+            min-height: 100vh;
+            padding: 150px 10%;
+            position: relative;
+        }
+
+        .gear-title {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 100px;
+            color: var(--light-text);
+        }
+
+        .gear-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .gear-card {
+            width: 300px;
+            background: var(--dark-card);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: all 0.5s;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            margin: 0 20px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .gear-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gear-card:hover {
+            transform: translateY(-30px);
+            border-color: var(--cyber-teal);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .gear-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 2.5rem;
+            color: var(--cyber-teal);
+            transition: all 0.5s;
+        }
+
+        .gear-card:hover .gear-icon {
+            background: var(--cyber-teal);
+            color: var(--deep-blue);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Interactive World Map */
+        .world-map-section {
+            min-height: 100vh;
+            padding: 150px 10%;
+            position: relative;
+        }
+
+        .map-container {
+            position: relative;
+            height: 600px;
+            background: rgba(17, 34, 64, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        .map-visual {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .map-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--cyber-teal);
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s;
+            box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 255, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+        }
+
+        .map-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            background: var(--gold-accent);
+        }
+
+        .map-tooltip {
+            position: absolute;
+            background: var(--dark-card);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .map-point:hover .map-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Journey Timeline */
+        .timeline-section {
+            min-height: 100vh;
+            padding: 150px 10%;
+            position: relative;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--cyber-teal), var(--gold-accent));
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            margin: 80px 0;
+            position: relative;
+            width: 45%;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .timeline-item.left {
+            left: 0;
+        }
+
+        .timeline-item.right {
+            left: 55%;
+        }
+
+        .timeline-item.active {
+            animation: timelineAppear 1s forwards;
+        }
+
+        @keyframes timelineAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-content {
+            background: var(--dark-card);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            position: relative;
+            transition: all 0.5s;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--cyber-teal);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .timeline-date {
+            position: absolute;
+            top: -25px;
+            background: var(--deep-blue);
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: 1px solid var(--cyber-teal);
+            font-weight: 600;
+            color: var(--cyber-teal);
+        }
+
+        .timeline-item.left .timeline-date {
+            right: -50px;
+        }
+
+        .timeline-item.right .timeline-date {
+            left: -50px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 10% 50px;
+            background: rgba(10, 25, 47, 0.9);
+            border-top: 1px solid rgba(0, 255, 204, 0.1);
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 60px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--cyber-teal);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--gold-accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 255, 204, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyber-teal);
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .social-icon:hover {
+            background: var(--cyber-teal);
+            color: var(--deep-blue);
+            transform: translateY(-5px) rotate(10deg);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+            
+            .chapter-content {
+                flex-direction: column;
+                gap: 50px;
+            }
+            
+            .chapter-text, .chapter-gallery {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .floating-nav {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 3.2rem;
+            }
+            
+            .chapter-title {
+                font-size: 2.8rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 80px;
+            }
+            
+            .timeline-item.left .timeline-date,
+            .timeline-item.right .timeline-date {
+                left: 80px;
+                right: auto;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 0 5%;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .journey-chapter, .gear-section, .world-map-section, .timeline-section {
+                padding: 100px 5%;
+            }
+            
+            .gear-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .gear-card {
+                margin: 20px 0;
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Parallax Background Layers -->
+    <div class="parallax-container">
+        <div class="parallax-layer layer-1"></div>
+        <div class="parallax-layer layer-2"></div>
+    </div>
+    
+    <!-- Interactive Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Floating Navigation -->
+    <div class="floating-nav">
+        <div class="nav-dot active" data-title="Home" data-target="hero"></div>
+        <div class="nav-dot" data-title="Arctic Journey" data-target="chapter1"></div>
+        <div class="nav-dot" data-title="Sahara" data-target="chapter2"></div>
+        <div class="nav-dot" data-title="Himalaya" data-target="chapter3"></div>
+        <div class="nav-dot" data-title="Gear" data-target="gear"></div>
+        <div class="nav-dot" data-title="World Map" data-target="map"></div>
+        <div class="nav-dot" data-title="Timeline" data-target="timeline"></div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">THE VISUAL ODYSSEY</h1>
+            <p class="hero-subtitle">Sebuah dokumentasi perjalanan fotografi epik melintasi tujuh benua, menangkap keindahan tersembunyi dunia melalui lensa yang penuh cerita.</p>
+            <div class="typewriter-text">Documenting Earth's Majesty • 8 Years • 47 Countries • Infinite Stories</div>
+            <a href="#chapter1" class="hero-btn">
+                <i class="fas fa-play-circle"></i> BEGIN THE JOURNEY
+            </a>
+        </div>
+    </section>
+    
+    <!-- Journey Chapter 1: Arctic -->
+    <section class="journey-chapter" id="chapter1">
+        <div class="chapter-content">
+            <div class="chapter-text">
+                <span class="chapter-number">CHAPTER 01</span>
+                <h2 class="chapter-title">Frozen Symphony<br>Arctic Wilderness</h2>
+                <p class="chapter-desc">Ekspedisi 3 bulan di lingkaran Arktik, menangkap tarian aurora, kehidupan kutub, dan lanskap es yang berubah cepat. Suhu terendah -42°C.</p>
+                
+                <div class="chapter-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">DAYS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4,200</div>
+                        <div class="stat-label">PHOTOS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">-42°C</div>
+                        <div class="stat-label">LOWEST TEMP</div>
+                    </div>
+                </div>
+                
+                <a href="#" class="hero-btn" style="padding: 15px 30px; font-size: 1rem;">
+                    <i class="fas fa-images"></i> VIEW FULL GALLERY
+                </a>
+            </div>
+            
+            <div class="chapter-gallery">
+                <div class="photo-stack" id="arcticStack">
+                    <div class="photo-item" style="transform: rotateY(-10deg) translateZ(-50px);">
+                        <img src="https://images.unsplash.com/photo-1506970790335-74cba60ee4e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Aurora">
+                        <div class="photo-info">
+                            <h4>Aurora Dance</h4>
+                            <p>Tromsø, Norway • f/2.8, 15s, ISO 3200</p>
+                        </div>
+                    </div>
+                    <div class="photo-item" style="transform: rotateY(-5deg) translateZ(-25px);">
+                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Polar Bear">
+                        <div class="photo-info">
+                            <h4>Arctic Guardian</h4>
+                            <p>Svalbard, Norway • f/6.3, 1/1000s, ISO 400</p>
+                        </div>
+                    </div>
+                    <div class="photo-item" style="transform: rotateY(0deg) translateZ(0);">
+                        <img src="https://images.unsplash.com/photo-1517963879433-6ad2b056d712?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Iceberg">
+                        <div class="photo-info">
+                            <h4>Blue Monolith</h4>
+                            <p>Ilulissat, Greenland • f/8, 1/250s, ISO 100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Journey Chapter 2: Sahara -->
+    <section class="journey-chapter" id="chapter2">
+        <div class="chapter-content">
+            <div class="chapter-gallery">
+                <div class="photo-stack" id="saharaStack">
+                    <div class="photo-item" style="transform: rotateY(-10deg) translateZ(-50px);">
+                        <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2026&q=80" alt="Sand Dunes">
+                        <div class="photo-info">
+                            <h4>Ocean of Sand</h4>
+                            <p>Erg Chebbi, Morocco • f/11, 1/125s, ISO 100</p>
+                        </div>
+                    </div>
+                    <div class="photo-item" style="transform: rotateY(-5deg) translateZ(-25px);">
+                        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2068&q=80" alt="Desert Night">
+                        <div class="photo-info">
+                            <h4>Milky Way Over Dunes</h4>
+                            <p>Sahara Desert • f/2.8, 25s, ISO 3200</p>
+                        </div>
+                    </div>
+                    <div class="photo-item" style="transform: rotateY(0deg) translateZ(0);">
+                        <img src="https://images.unsplash.com/photo-1523806971853-010fb43d15e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Nomad">
+                        <div class="photo-info">
+                            <h4>Desert Nomad</h4>
+                            <p>Mauritania • f/4, 1/500s, ISO 200</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chapter-text">
+                <span class="chapter-number">CHAPTER 02</span>
+                <h2 class="chapter-title">Sands of Time<br>Sahara Expedition</h2>
+                <p class="chapter-desc">Perjalanan melintasi gurun terpanas di dunia, dari Maroko hingga Mauritania. Mengabadikan kehidupan nomad, malam berbintang, dan oasis tersembunyi.</p>
+                
+                <div class="chapter-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">62</div>
+                        <div class="stat-label">DAYS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5,800</div>
+                        <div class="stat-label">PHOTOS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">52°C</div>
+                        <div class="stat-label">HIGHEST TEMP</div>
+                    </div>
+                </div>
+                
+                <a href="#" class="hero-btn" style="padding: 15px 30px; font-size: 1rem;">
+                    <i class="fas fa-images"></i> VIEW FULL GALLERY
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Journey Chapter 3: Himalaya -->
+    <section class="journey-chapter" id="chapter3">
+        <div class="chapter-content">
+            <div class="chapter-text">
+                <span class="chapter-number">CHAPTER 03</span>
+                <h2 class="chapter-title">Roof of the World<br>Himalayan Trek</h2>
+                <p class="chapter-desc">Pendakian ke base camp Everest dan eksplorasi lembah terpencil Nepal. Dokumentasi budaya lokal, biara kuno, dan puncak tertinggi dunia.</p>
+                
+                <div class="chapter-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">74</div>
+                        <div class="stat-label">DAYS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">6,500</div>
+                        <div class="stat-label">PHOTOS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5,364m</div>
+                        <div class="stat-label">HIGHEST POINT</div>
+                    </div>
+                </div>
+                
+                <a href="#" class="hero-btn" style="padding: 15px 30px; font-size: 1rem;">
+                    <i class="fas fa-images"></i> VIEW FULL GALLERY
+                </a>
+            </div>
+            
+            <div class="chapter-gallery">
+                <div class="photo-stack" id="himalayaStack">
+                    <div class="photo-item" style="transform: rotateY(-10deg) translateZ(-50px);">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Everest">
+                        <div class="photo-info">
+                            <h4>Mount Everest</h4>
+                            <p>Nepal • f/10, 1/400s, ISO 200</p>
+                        </div>
+                    </div>
+                    <div class="photo-item" style="transform: rotateY(-5deg) translateZ(-25px);">
+                        <img src="https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Monastery">
+                        <div class="photo-info">
+                            <h4>Tengboche Monastery</h4>
+                            <p>Khumbu Valley • f/5.6, 1/250s, ISO 400</p>
+                        </div>
+                    </div>
+                    <div class="photo-item" style="transform: rotateY(0deg) translateZ(0);">
+                        <img src="https://images.unsplash.com/photo-1536152471326-642d7bbcb707?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Prayer Flags">
+                        <div class="photo-info">
+                            <h4>Prayer Flags</h4>
+                            <p>Namche Bazaar • f/4, 1/1000s, ISO 100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Photography Gear -->
+    <section class="gear-section" id="gear">
+        <h2 class="gear-title">EXPEDITION GEAR</h2>
+        <div class="gear-container">
+            <div class="gear-card">
+                <div class="gear-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>Primary Camera</h3>
+                <p>Sony A7R IV with 61MP sensor. Tahan cuaca ekstrem dari -30°C hingga 50°C.</p>
+                <div class="gear-specs">
+                    <p><strong>Lens Kit:</strong> 16-35mm f/2.8, 24-70mm f/2.8, 70-200mm f/2.8</p>
+                </div>
+            </div>
+            
+            <div class="gear-card">
+                <div class="gear-icon">
+                    <i class="fas fa-suitcase"></i>
+                </div>
+                <h3>Expedition Pack</h3>
+                <p>Pelican Case dengan pengontrol kelembaban. Membawa 45kg gear melalui berbagai medan.</p>
+                <div class="gear-specs">
+                    <p><strong>Capacity:</strong> 3 Bodies, 8 Lenses, Drones, Batteries</p>
+                </div>
+            </div>
+            
+            <div class="gear-card">
+                <div class="gear-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <h3>Communication</h3>
+                <p>Satellite phone & portable solar charger. Tetap terhubung di daerah tanpa sinyal.</p>
+                <div class="gear-specs">
+                    <p><strong>Power:</strong> 200W Solar Panel + 50,000mAh Battery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Interactive World Map -->
+    <section class="world-map-section" id="map">
+        <h2 class="gear-title">JOURNEY MAP</h2>
+        <div class="map-container">
+            <div class="map-visual">
+                <!-- Map points will be positioned via JavaScript -->
+                <div class="map-point" style="top: 20%; left: 15%;" data-country="Norway">
+                    <div class="map-tooltip">
+                        <h4>Arctic Norway</h4>
+                        <p>3 months capturing aurora and polar wildlife</p>
+                        <p><strong>Season:</strong> Winter 2022</p>
+                    </div>
+                </div>
+                <div class="map-point" style="top: 35%; left: 45%;" data-country="Morocco">
+                    <div class="map-tooltip">
+                        <h4>Sahara Desert</h4>
+                        <p>2-month expedition across the world's largest hot desert</p>
+                        <p><strong>Season:</strong> Spring 2023</p>
+                    </div>
+                </div>
+                <div class="map-point" style="top: 40%; left: 75%;" data-country="Nepal">
+                    <div class="map-tooltip">
+                        <h4>Himalayas</h4>
+                        <p>Everest Base Camp trek and remote valley exploration</p>
+                        <p><strong>Season:</strong> Autumn 2023</p>
+                    </div>
+                </div>
+                <div class="map-point" style="top: 60%; left: 50%;" data-country="Madagascar">
+                    <div class="map-tooltip">
+                        <h4>Madagascar</h4>
+                        <p>Unique biodiversity and landscape photography</p>
+                        <p><strong>Season:</strong> Summer 2024</p>
+                    </div>
+                </div>
+                <div class="map-point" style="top: 80%; left: 25%;" data-country="Patagonia">
+                    <div class="map-tooltip">
+                        <h4>Patagonia</h4>
+                        <p>Glaciers and mountains of Southern Argentina</p>
+                        <p><strong>Upcoming:</strong> Winter 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Journey Timeline -->
+    <section class="timeline-section" id="timeline">
+        <h2 class="gear-title">EXPEDITION TIMELINE</h2>
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-date">JAN - MAR 2022</div>
+                    <h3>Arctic Expedition</h3>
+                    <p>Photographing polar night, northern lights, and wildlife in Svalbard and Northern Norway. Survived extreme cold temperatures.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-date">APR - MAY 2023</div>
+                    <h3>Sahara Crossing</h3>
+                    <p>Two-month journey by 4x4 and camel across the Sahara from Morocco to Mauritania. Documented nomadic cultures and desert landscapes.</p>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-date">SEP - NOV 2023</div>
+                    <h3>Himalayan Trek</h3>
+                    <p>Three-month photography expedition in Nepal, reaching Everest Base Camp and exploring remote Himalayan valleys.</p>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-date">PLANNED 2024</div>
+                    <h3>Patagonian Glaciers</h3>
+                    <p>Upcoming expedition to document the rapidly changing glaciers and landscapes of Southern Patagonia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>The Visual Odyssey</h3>
+                <p>An ongoing photographic journey documenting Earth's most extraordinary places and stories. Follow the expedition in real-time.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-patreon"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Expedition Chapters</h3>
+                <ul style="list-style: none;">
+                    <li><a href="#chapter1" style="color: #8892b0; text-decoration: none; display: block; margin-bottom: 15px; transition: color 0.3s;">01 • Arctic Wilderness</a></li>
+                    <li><a href="#chapter2" style="color: #8892b0; text-decoration: none; display: block; margin-bottom: 15px; transition: color 0.3s;">02 • Sahara Desert</a></li>
+                    <li><a href="#chapter3" style="color: #8892b0; text-decoration: none; display: block; margin-bottom: 15px; transition: color 0.3s;">03 • Himalayas</a></li>
+                    <li><a href="#" style="color: #8892b0; text-decoration: none; display: block; margin-bottom: 15px; transition: color 0.3s;">04 • Madagascar</a></li>
+                    <li><a href="#" style="color: #8892b0; text-decoration: none; display: block; margin-bottom: 15px; transition: color 0.3s;">05 • Patagonia</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Latest Updates</h3>
+                <p>Subscribe to the newsletter for exclusive behind-the-scenes content, photography tips, and expedition announcements.</p>
+                <div style="margin-top: 20px;">
+                    <input type="email" placeholder="Your Email Address" style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,204,0.2); border-radius: 5px; color: white; margin-bottom: 15px;">
+                    <button style="width: 100%; padding: 15px; background: linear-gradient(135deg, var(--cyber-teal), #00cc99); border: none; border-radius: 5px; color: var(--deep-blue); font-weight: 700; cursor: pointer;">SUBSCRIBE</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 The Visual Odyssey Project. All photographs and content are protected by international copyright.</p>
+            <p style="margin-top: 10px;">Designed for the modern explorer • Built with passion for storytelling</p>
+        </div>
+    </footer>
+
+    <script>
+        // Parallax Scrolling Effect
+        document.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            
+            parallaxLayers.forEach((layer, index) => {
+                const speed = index * 0.5;
+                const yPos = -(scrolled * speed / 10);
+                layer.style.transform = `translateY(${yPos}px) translateZ(-${index * 2}px) scale(${1 + index * 0.1})`;
+            });
+        });
+
+        // Floating Navigation
+        const navDots = document.querySelectorAll('.nav-dot');
+        const sections = document.querySelectorAll('section');
+        
+        function updateActiveNav() {
+            let currentSection = '';
+            const scrollPos = window.scrollY + window.innerHeight / 3;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.dataset.target === currentSection) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+        
+        navDots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    window.scrollTo({
+                        top: targetSection.offsetTop,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active dot
+                    navDots.forEach(d => d.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Chapter Animation on Scroll
+        const chapterTexts = document.querySelectorAll('.chapter-text');
+        const gearCards = document.querySelectorAll('.gear-card');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        function checkScrollAnimations() {
+            const triggerBottom = window.innerHeight * 0.85;
+            
+            // Chapter texts
+            chapterTexts.forEach(text => {
+                const textTop = text.getBoundingClientRect().top;
+                if (textTop < triggerBottom) {
+                    text.classList.add('active');
+                }
+            });
+            
+            // Gear cards
+            gearCards.forEach((card, index) => {
+                const cardTop = card.getBoundingClientRect().top;
+                if (cardTop < triggerBottom) {
+                    setTimeout(() => {
+                        card.classList.add('active');
+                    }, index * 200);
+                }
+            });
+            
+            // Timeline items
+            timelineItems.forEach((item, index) => {
+                const itemTop = item.getBoundingClientRect().top;
+                if (itemTop < triggerBottom) {
+                    setTimeout(() => {
+                        item.classList.add('active');
+                    }, index * 300);
+                }
+            });
+        }
+        
+        // Interactive Photo Stacks
+        const photoStacks = document.querySelectorAll('.photo-stack');
+        
+        photoStacks.forEach(stack => {
+            const photos = stack.querySelectorAll('.photo-item');
+            
+            photos.forEach((photo, index) => {
+                photo.addEventListener('mouseenter', function() {
+                    // Bring this photo to front
+                    photos.forEach(p => {
+                        p.style.zIndex = '1';
+                        p.style.filter = 'brightness(0.7)';
+                    });
+                    
+                    this.style.zIndex = '10';
+                    this.style.filter = 'brightness(1)';
+                    
+                    // Adjust other photos
+                    photos.forEach((p, i) => {
+                        if (p !== this) {
+                            const distance = Math.abs(index - i);
+                            const rotation = distance * 5;
+                            const translation = distance * 30;
+                            
+                            if (i < index) {
+                                p.style.transform = `rotateY(-${10 + rotation}deg) translateZ(-${50 + translation}px)`;
+                            } else if (i > index) {
+                                p.style.transform = `rotateY(${10 + rotation}deg) translateZ(-${50 + translation}px)`;
+                            }
+                        }
+                    });
+                    
+                    // Center the hovered photo
+                    this.style.transform = 'rotateY(0deg) translateZ(50px)';
+                });
+                
+                photo.addEventListener('mouseleave', function() {
+                    // Reset all photos
+                    photos.forEach((p, i) => {
+                        p.style.zIndex = (photos.length - i).toString();
+                        p.style.filter = 'brightness(1)';
+                        
+                        if (i === 0) {
+                            p.style.transform = 'rotateY(-10deg) translateZ(-50px)';
+                        } else if (i === 1) {
+                            p.style.transform = 'rotateY(-5deg) translateZ(-25px)';
+                        } else if (i === 2) {
+                            p.style.transform = 'rotateY(0deg) translateZ(0)';
+                        }
+                    });
+                });
+            });
+        });
+        
+        // Typewriter Effect
+        const typewriterText = document.querySelector('.typewriter-text');
+        const originalText = typewriterText.textContent;
+        let charIndex = 0;
+        let isDeleting = false;
+        let isPaused = false;
+        let pauseDuration = 1500;
+        
+        function typeWriterEffect() {
+            if (isPaused) {
+                setTimeout(typeWriterEffect, pauseDuration);
+                isPaused = false;
+                return;
+            }
+            
+            const currentText = originalText.substring(0, charIndex);
+            typewriterText.textContent = currentText;
+            
+            if (!isDeleting && charIndex === originalText.length) {
+                isDeleting = true;
+                isPaused = true;
+                setTimeout(typeWriterEffect, pauseDuration);
+                return;
+            }
+            
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                isPaused = true;
+                setTimeout(typeWriterEffect, pauseDuration);
+                return;
+            }
+            
+            charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
+            const typingSpeed = isDeleting ? 50 : 100;
+            setTimeout(typeWriterEffect, typingSpeed);
+        }
+        
+        // Map Point Interactions
+        const mapPoints = document.querySelectorAll('.map-point');
+        
+        mapPoints.forEach(point => {
+            point.addEventListener('mouseenter', function() {
+                // Add pulse animation
+                this.style.animation = 'pulse 0.5s infinite';
+                
+                // Show all tooltips for this country
+                const country = this.dataset.country;
+                document.querySelectorAll(`.map-point[data-country="${country}"] .map-tooltip`).forEach(tooltip => {
+                    tooltip.style.opacity = '1';
+                    tooltip.style.visibility = 'visible';
+                });
+            });
+            
+            point.addEventListener('mouseleave', function() {
+                // Stop pulse animation
+                this.style.animation = '';
+                
+                // Hide all tooltips
+                document.querySelectorAll('.map-tooltip').forEach(tooltip => {
+                    tooltip.style.opacity = '0';
+                    tooltip.style.visibility = 'hidden';
+                });
+            });
+        });
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start typewriter effect
+            setTimeout(typeWriterEffect, 1000);
+            
+            // Initial check for scroll animations
+            checkScrollAnimations();
+            
+            // Set up scroll listeners
+            window.addEventListener('scroll', function() {
+                updateActiveNav();
+                checkScrollAnimations();
+            });
+            
+            // Initial active nav update
+            updateActiveNav();
+            
+            // Add click handler for all photo items to simulate lightbox
+            document.querySelectorAll('.photo-item').forEach(photo => {
+                photo.addEventListener('click', function() {
+                    const imgSrc = this.querySelector('img').src;
+                    const imgAlt = this.querySelector('img').alt;
+                    
+                    // Create lightbox modal
+                    const lightbox = document.createElement('div');
+                    lightbox.style.position = 'fixed';
+                    lightbox.style.top = '0';
+                    lightbox.style.left = '0';
+                    lightbox.style.width = '100%';
+                    lightbox.style.height = '100%';
+                    lightbox.style.backgroundColor = 'rgba(10, 25, 47, 0.95)';
+                    lightbox.style.display = 'flex';
+                    lightbox.style.alignItems = 'center';
+                    lightbox.style.justifyContent = 'center';
+                    lightbox.style.zIndex = '10000';
+                    lightbox.style.cursor = 'pointer';
+                    
+                    const lightboxImg = document.createElement('img');
+                    lightboxImg.src = imgSrc;
+                    lightboxImg.alt = imgAlt;
+                    lightboxImg.style.maxWidth = '90%';
+                    lightboxImg.style.maxHeight = '90%';
+                    lightboxImg.style.objectFit = 'contain';
+                    lightboxImg.style.borderRadius = '10px';
+                    lightboxImg.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.5)';
+                    
+                    lightbox.appendChild(lightboxImg);
+                    document.body.appendChild(lightbox);
+                    
+                    // Close lightbox on click
+                    lightbox.addEventListener('click', function() {
+                        document.body.removeChild(lightbox);
+                    });
+                });
+            });
+        });
+        
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
